@@ -10,7 +10,48 @@
 */
 
 // 双指针区间法
-function threeSum(nums: number) {
+function threeSum(nums: number[]) {
   // 先排序
+  const len = nums.length;
+  nums = nums.sort((a, b) => a - b);
+  const result: number[][] = [];
+  for (let i = 0; i < len; i++) {
+    // 排序后 nums[i]大于零了，后边的值相加一定大于零，直接return
+    if (nums[i] > 0) {
+      return result;
+    }
+    // 去重，只能向前去重
+    if (i > 0 && nums[i] == nums[i - 1]) {
+      continue;
+    }
+    let left = i + 1;
+    let right = len - 1;
+    while(left < right) {
+      // 相加大于零，右侧指针左移
+      if (nums[i] + nums[left] + nums[right] > 0) right--;
+      // 左侧指针右移
+      else if (nums[i] + nums[left] + nums[right] < 0) left++;
+      // 相等
+      else {
+        result.push([nums[i], nums[left], nums[right]]);
+        right --;
+        left ++;
+        while (nums[right] === nums[right + 1]) {
+          right--;
+        }
+        while (nums[left] === nums[left - 1]) {
+          left++;
+        }
 
+      }
+    }
+  }
+  return result;
 }
+
+
+const nums = [-1, 0, 1, 2, -1, -4]
+
+const res = threeSum(nums);
+
+console.log(res);
